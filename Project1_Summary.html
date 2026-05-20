@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azure Databricks — Project 1 Summary</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #3b82f6;
+    --accent2: #06b6d4;
+    --accent3: #8b5cf6;
+    --bronze: #cd7f32;
+    --silver: #94a3b8;
+    --gold: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+    position: relative;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    font-family: var(--mono);
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-title {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: var(--mono);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent2);
+    margin-bottom: 0.5rem;
+    font-family: var(--mono);
+  }
+
+  .card p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  /* Grid */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Medallion layers */
+  .layers {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 1rem 0;
+  }
+
+  .layer {
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  .layer:first-child { border-radius: 12px 12px 0 0; }
+  .layer:last-child { border-radius: 0 0 12px 12px; }
+
+  .layer-bronze { border-left: 4px solid var(--bronze); background: rgba(205,127,50,0.05); }
+  .layer-silver { border-left: 4px solid var(--silver); background: rgba(148,163,184,0.05); }
+  .layer-gold   { border-left: 4px solid var(--gold);   background: rgba(245,158,11,0.05); }
+
+  .layer-name {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .layer-bronze .layer-name { color: var(--bronze); }
+  .layer-silver .layer-name { color: var(--silver); }
+  .layer-gold   .layer-name { color: var(--gold); }
+
+  .layer p { color: var(--muted); font-size: 0.88rem; }
+
+  .arrow-down {
+    text-align: center;
+    color: var(--muted);
+    font-size: 1.2rem;
+    line-height: 1;
+    background: var(--surface2);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    padding: 4px 0;
+  }
+
+  /* Code blocks */
+  .code-block {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    line-height: 1.8;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+  }
+
+  .kw  { color: #ff79c6; }
+  .fn  { color: #50fa7b; }
+  .str { color: #f1fa8c; }
+  .cm  { color: #6272a4; }
+  .var { color: #8be9fd; }
+  .num { color: #bd93f9; }
+
+  /* Comparison table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin: 0.75rem 0;
+  }
+
+  th {
+    background: var(--surface2);
+    color: var(--accent2);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.6rem 1rem;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  td {
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    vertical-align: top;
+  }
+
+  td:first-child { color: var(--text); font-weight: 600; }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* Concept pills */
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0.75rem 0;
+  }
+
+  .pill {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+
+  .pill-blue   { color: var(--accent);  border-color: var(--accent);  background: rgba(59,130,246,0.08); }
+  .pill-teal   { color: var(--accent2); border-color: var(--accent2); background: rgba(6,182,212,0.08); }
+  .pill-purple { color: var(--accent3); border-color: var(--accent3); background: rgba(139,92,246,0.08); }
+  .pill-green  { color: var(--green);   border-color: var(--green);   background: rgba(16,185,129,0.08); }
+  .pill-gold   { color: var(--gold);    border-color: var(--gold);    background: rgba(245,158,11,0.08); }
+
+  /* Exam questions */
+  .exam-q {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent3);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .exam-q .q {
+    font-size: 0.88rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    font-style: italic;
+  }
+
+  .exam-q .a {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--green);
+  }
+
+  /* Tips */
+  .tip {
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 8px;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.88rem;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    display: flex;
+    gap: 10px;
+  }
+
+  .tip-icon { color: var(--gold); flex-shrink: 0; font-size: 1rem; }
+
+  /* Progress */
+  .progress-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+
+  .status-done    { color: var(--green); font-size: 1.1rem; }
+  .status-next    { color: var(--accent); font-size: 1.1rem; }
+  .status-planned { color: var(--muted); font-size: 1.1rem; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 2rem 0;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  /* Cost warning */
+  .warning {
+    background: rgba(239,68,68,0.06);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: 8px;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.88rem;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+    display: flex;
+    gap: 10px;
+  }
+
+  .warning-icon { color: var(--red); flex-shrink: 0; }
+
+  code {
+    font-family: var(--mono);
+    background: var(--surface2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: var(--accent2);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="badge">Project 1 — Complete</div>
+    <h1>Azure Databricks<br>Learning Journey</h1>
+    <p class="subtitle">PySpark · Delta Lake · Medallion Architecture · AZ-900 Prep</p>
+  </div>
+
+  <!-- What I built -->
+  <div class="section">
+    <div class="section-title">What I built</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Azure Setup</div>
+        <p>Created a real Azure Databricks workspace on Pay-As-You-Go subscription with a 4-core 16GB cluster running Photon engine (Runtime 18.1)</p>
+      </div>
+      <div class="card">
+        <div class="card-title">PySpark Pipeline</div>
+        <p>Wrote first PySpark code — DataFrames, transformations, actions, filters, groupBy, withColumn, orderBy from scratch</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Delta Lake</div>
+        <p>Created Delta tables, used Time Travel to query historical versions, explored full transaction history and ACID properties</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Medallion Architecture</div>
+        <p>Built complete Bronze → Silver → Gold pipeline with data quality checks, deduplication, null handling and validation report</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Medallion Architecture -->
+  <div class="section">
+    <div class="section-title">Medallion Architecture</div>
+    <div class="layers">
+      <div class="layer layer-bronze">
+        <div class="layer-name">Bronze — Raw Layer</div>
+        <p>Stores everything exactly as received — duplicates, nulls, wrong formats included. Never modify this layer. It is your safety net. If Silver or Gold break, you always rebuild from Bronze.</p>
+        <div class="code-block">
+<span class="var">df_raw</span>.<span class="fn">write</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">mode</span>(<span class="str">"overwrite"</span>).<span class="fn">saveAsTable</span>(<span class="str">"bronze_employees"</span>)
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="layer layer-silver">
+        <div class="layer-name">Silver — Clean Layer</div>
+        <p>Remove duplicates, handle nulls, convert data types. This is where raw data becomes trustworthy. Data engineers own this layer.</p>
+        <div class="code-block">
+<span class="var">df_silver</span> = <span class="var">df_silver</span>.<span class="fn">dropDuplicates</span>([<span class="str">"id"</span>])<br>
+<span class="var">df_silver</span> = <span class="var">df_silver</span>.<span class="fn">filter</span>(<span class="fn">col</span>(<span class="str">"country"</span>).<span class="fn">isNotNull</span>() &amp; <span class="fn">col</span>(<span class="str">"salary"</span>).<span class="fn">isNotNull</span>())<br>
+<span class="var">df_silver</span> = <span class="var">df_silver</span>.<span class="fn">withColumn</span>(<span class="str">"hire_date"</span>, <span class="fn">to_date</span>(<span class="fn">col</span>(<span class="str">"hire_date"</span>), <span class="str">"yyyy-MM-dd"</span>))
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="layer layer-gold">
+        <div class="layer-name">Gold — Business Layer</div>
+        <p>Pre-aggregated summaries for dashboards, reports and executives. Business users only ever touch Gold. Built from Silver — never from Bronze directly.</p>
+        <div class="code-block">
+<span class="var">df_gold</span> = <span class="var">df_silver</span>.<span class="fn">groupBy</span>(<span class="str">"country"</span>).<span class="fn">agg</span>(<br>
+&nbsp;&nbsp;<span class="fn">count</span>(<span class="str">"id"</span>).<span class="fn">alias</span>(<span class="str">"total_employees"</span>),<br>
+&nbsp;&nbsp;<span class="fn">round</span>(<span class="fn">avg</span>(<span class="str">"salary"</span>), <span class="num">2</span>).<span class="fn">alias</span>(<span class="str">"avg_salary"</span>),<br>
+&nbsp;&nbsp;<span class="fn">max</span>(<span class="str">"salary"</span>).<span class="fn">alias</span>(<span class="str">"max_salary"</span>)<br>
+)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PySpark vs Teradata -->
+  <div class="section">
+    <div class="section-title">PySpark vs Teradata — Quick Reference</div>
+    <table>
+      <tr>
+        <th>Operation</th>
+        <th>Teradata SQL</th>
+        <th>PySpark</th>
+      </tr>
+      <tr><td>Select all</td><td><code>SELECT * FROM table</code></td><td><code>df.show()</code></td></tr>
+      <tr><td>Filter rows</td><td><code>WHERE country = 'UAE'</code></td><td><code>.filter(col("country") == "UAE")</code></td></tr>
+      <tr><td>Group by</td><td><code>GROUP BY country</code></td><td><code>.groupBy("country").count()</code></td></tr>
+      <tr><td>Add column</td><td><code>CASE WHEN ... END</code></td><td><code>.withColumn("grade", when(...))</code></td></tr>
+      <tr><td>Sort</td><td><code>ORDER BY salary DESC</code></td><td><code>.orderBy(col("salary").desc())</code></td></tr>
+      <tr><td>Remove duplicates</td><td><code>SELECT DISTINCT id</code></td><td><code>.dropDuplicates(["id"])</code></td></tr>
+      <tr><td>Null check</td><td><code>WHERE col IS NOT NULL</code></td><td><code>.filter(col("x").isNotNull())</code></td></tr>
+      <tr><td>Cast date</td><td><code>CAST(x AS DATE FORMAT ...)</code></td><td><code>to_date(col("x"), "yyyy-MM-dd")</code></td></tr>
+      <tr><td>Create table</td><td><code>CREATE TABLE AS SELECT</code></td><td><code>.saveAsTable("name")</code></td></tr>
+      <tr><td>Rename column</td><td><code>col AS new_name</code></td><td><code>.alias("new_name")</code></td></tr>
+    </table>
+  </div>
+
+  <!-- Delta Lake -->
+  <div class="section">
+    <div class="section-title">Delta Lake — Key Concepts</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Time Travel</div>
+        <p>Query any historical version of a table. If data gets corrupted, recover instantly without backups.</p>
+        <div class="code-block" style="margin-top:8px">
+<span class="fn">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>)<br>
+&nbsp;.<span class="fn">option</span>(<span class="str">"versionAsOf"</span>, <span class="num">0</span>)<br>
+&nbsp;.<span class="fn">table</span>(<span class="str">"bronze_employees"</span>)
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Transaction History</div>
+        <p>Every change is automatically logged — who changed what, when, which version. Zero configuration needed.</p>
+        <div class="code-block" style="margin-top:8px">
+<span class="var">delta_table</span>.<span class="fn">history</span>()<br>
+&nbsp;.<span class="fn">select</span>(<span class="str">"version"</span>, <span class="str">"timestamp"</span>, <span class="str">"operation"</span>)<br>
+&nbsp;.<span class="fn">show</span>()
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">ACID Transactions</div>
+        <p><b>A</b>tomicity — all or nothing. <b>C</b>onsistency — always valid. <b>I</b>solation — no conflicts. <b>D</b>urability — survives failures.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Write Modes</div>
+        <p><code>append</code> — adds rows, keeps existing. Like INSERT.<br><code>overwrite</code> — replaces everything. Like TRUNCATE + INSERT.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Azure Concepts -->
+  <div class="section">
+    <div class="section-title">Azure Concepts Learned — AZ-900 Ready</div>
+    <table>
+      <tr><th>Concept</th><th>What it means</th><th>Real world example</th></tr>
+      <tr>
+        <td>Resource Group</td>
+        <td>Folder that organizes related Azure services together</td>
+        <td>Delete one group to remove all project resources instantly</td>
+      </tr>
+      <tr>
+        <td>PaaS</td>
+        <td>Platform as a Service — Azure manages infrastructure, you just use it</td>
+        <td>Databricks workspace — no servers to configure yourself</td>
+      </tr>
+      <tr>
+        <td>Region</td>
+        <td>Physical location of Azure data centers</td>
+        <td>UAE North — servers physically located in UAE</td>
+      </tr>
+      <tr>
+        <td>Quota / Limits</td>
+        <td>Default resource limits on new subscriptions</td>
+        <td>Max CPU cores allowed before requesting an increase</td>
+      </tr>
+      <tr>
+        <td>Pay-as-you-go</td>
+        <td>Consumption-based pricing — pay only for what you use</td>
+        <td>DBU/hour — charged only while cluster is running</td>
+      </tr>
+      <tr>
+        <td>Auto-termination</td>
+        <td>Automatically stops idle resources to save cost</td>
+        <td>Cluster terminates after 30 min of no activity</td>
+      </tr>
+      <tr>
+        <td>Spot Instances</td>
+        <td>Spare Azure capacity at up to 90% discount</td>
+        <td>Great for learning — occasional interruptions acceptable</td>
+      </tr>
+      <tr>
+        <td>Virtual Network</td>
+        <td>Private network for Azure resources</td>
+        <td>Databricks cluster unreachable from public internet</td>
+      </tr>
+      <tr>
+        <td>Entra ID / AAD</td>
+        <td>Azure identity and access management</td>
+        <td>Single login gives access to all Microsoft services</td>
+      </tr>
+      <tr>
+        <td>Photon Engine</td>
+        <td>Databricks C++ query engine — up to 8x faster than Spark</td>
+        <td>Automatically available on your cluster — no setup needed</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Key tips -->
+  <div class="section">
+    <div class="section-title">Tips to Remember</div>
+    <div class="tip">
+      <span class="tip-icon">★</span>
+      <span><strong>Always terminate your cluster</strong> after every session. Auto-termination is set to 30 min but manually terminate too. A 2hr session costs roughly $0.28 — leaving it running overnight costs much more.</span>
+    </div>
+    <div class="tip">
+      <span class="tip-icon">★</span>
+      <span><strong>Run All cells after cluster restart.</strong> Variables like <code>df_silver</code> live in cluster memory — they disappear when cluster stops. Always Run All from top before adding new cells in a new session.</span>
+    </div>
+    <div class="tip">
+      <span class="tip-icon">★</span>
+      <span><strong>Transformations vs Actions.</strong> <code>filter()</code>, <code>groupBy()</code>, <code>withColumn()</code> are lazy — nothing runs. Only <code>show()</code>, <code>count()</code>, <code>save()</code> trigger actual execution on your cluster.</span>
+    </div>
+    <div class="tip">
+      <span class="tip-icon">★</span>
+      <span><strong>Bronze → Silver → Gold always.</strong> Gold reads from Silver. Silver reads from Bronze. Never skip layers. Never read Gold from Bronze directly.</span>
+    </div>
+    <div class="tip">
+      <span class="tip-icon">★</span>
+      <span><strong>dropDuplicates(["id"]) vs dropDuplicates().</strong> Without column list — removes only 100% identical rows. With column list — removes rows sharing that column value even if other columns differ.</span>
+    </div>
+    <div class="tip">
+      <span class="tip-icon">★</span>
+      <span><strong>Nobody memorizes PySpark syntax.</strong> Senior engineers Google and use AI daily. What you memorize is the concept — filter, group, aggregate, join. Syntax comes naturally with practice after week 3-4.</span>
+    </div>
+  </div>
+
+  <!-- AZ-900 Exam Questions -->
+  <div class="section">
+    <div class="section-title">AZ-900 Practice Questions</div>
+
+    <div class="exam-q">
+      <div class="q">"A company wants to delete all resources related to a project at once. What should they use?"</div>
+      <div class="a">→ Resource Group — delete the group, everything inside is gone</div>
+    </div>
+
+    <div class="exam-q">
+      <div class="q">"Which Azure service provides distributed data processing using Python without managing servers?"</div>
+      <div class="a">→ Azure Databricks with Apache Spark (PaaS)</div>
+    </div>
+
+    <div class="exam-q">
+      <div class="q">"A company accidentally overwrote production data. They need to recover the previous version instantly without a backup. Which feature helps?"</div>
+      <div class="a">→ Delta Lake Time Travel — versionAsOf recovers any historical version in seconds</div>
+    </div>
+
+    <div class="exam-q">
+      <div class="q">"Which pricing model charges based on actual resource consumption rather than a fixed fee?"</div>
+      <div class="a">→ Pay-as-you-go / Consumption-based pricing</div>
+    </div>
+
+    <div class="exam-q">
+      <div class="q">"A new Azure subscription cannot deploy resources beyond a certain limit. What controls this?"</div>
+      <div class="a">→ Azure subscription limits and quotas</div>
+    </div>
+
+    <div class="exam-q">
+      <div class="q">"Which Medallion Architecture layer should a CEO dashboard connect to?"</div>
+      <div class="a">→ Gold layer — pre-aggregated, business-ready summaries</div>
+    </div>
+
+    <div class="exam-q">
+      <div class="q">"Which of the following is NOT a property of ACID transactions? A) Atomicity B) Consistency C) Availability D) Durability"</div>
+      <div class="a">→ C — Availability is CAP theorem, not ACID. Classic exam trap!</div>
+    </div>
+
+    <div class="exam-q">
+      <div class="q">"Which PySpark write mode adds rows without deleting existing data?"</div>
+      <div class="a">→ append — like INSERT in Teradata. overwrite = TRUNCATE + INSERT</div>
+    </div>
+
+    <div class="exam-q">
+      <div class="q">"A company wants to run non-critical workloads at minimum cost using spare Azure capacity. What should they use?"</div>
+      <div class="a">→ Spot Instances — up to 90% cheaper than regular pay-as-you-go</div>
+    </div>
+
+    <div class="exam-q">
+      <div class="q">"Which Azure feature allows employees to use a single login to access all Microsoft cloud services?"</div>
+      <div class="a">→ Azure Active Directory / Microsoft Entra ID with Single Sign-On</div>
+    </div>
+  </div>
+
+  <!-- Concepts covered -->
+  <div class="section">
+    <div class="section-title">All Concepts Covered</div>
+    <div class="pills">
+      <span class="pill pill-blue">PySpark DataFrames</span>
+      <span class="pill pill-blue">Transformations vs Actions</span>
+      <span class="pill pill-blue">filter()</span>
+      <span class="pill pill-blue">groupBy()</span>
+      <span class="pill pill-blue">withColumn()</span>
+      <span class="pill pill-blue">orderBy()</span>
+      <span class="pill pill-blue">dropDuplicates()</span>
+      <span class="pill pill-blue">to_date()</span>
+      <span class="pill pill-blue">alias()</span>
+      <span class="pill pill-blue">isNotNull()</span>
+      <span class="pill pill-teal">Delta Lake</span>
+      <span class="pill pill-teal">Time Travel</span>
+      <span class="pill pill-teal">ACID Transactions</span>
+      <span class="pill pill-teal">Transaction History</span>
+      <span class="pill pill-teal">append mode</span>
+      <span class="pill pill-teal">overwrite mode</span>
+      <span class="pill pill-teal">saveAsTable()</span>
+      <span class="pill pill-purple">Medallion Architecture</span>
+      <span class="pill pill-purple">Bronze Layer</span>
+      <span class="pill pill-purple">Silver Layer</span>
+      <span class="pill pill-purple">Gold Layer</span>
+      <span class="pill pill-purple">Pipeline Validation</span>
+      <span class="pill pill-green">Azure Databricks</span>
+      <span class="pill pill-green">Resource Groups</span>
+      <span class="pill pill-green">PaaS</span>
+      <span class="pill pill-green">Regions</span>
+      <span class="pill pill-green">Quotas</span>
+      <span class="pill pill-green">Pay-as-you-go</span>
+      <span class="pill pill-green">Virtual Networks</span>
+      <span class="pill pill-green">Entra ID</span>
+      <span class="pill pill-green">Spot Instances</span>
+      <span class="pill pill-green">Photon Engine</span>
+      <span class="pill pill-gold">AZ-900 Prep</span>
+      <span class="pill pill-gold">Cost Management</span>
+      <span class="pill pill-gold">Auto-termination</span>
+    </div>
+  </div>
+
+  <!-- Progress Tracker -->
+  <div class="section">
+    <div class="section-title">Learning Roadmap</div>
+    <div class="progress-item">
+      <span class="status-done">✓</span>
+      <span><strong>Project 1</strong> — PySpark basics + Delta Lake + Medallion Architecture</span>
+    </div>
+    <div class="progress-item">
+      <span class="status-next">→</span>
+      <span><strong>Project 2</strong> — Real datasets from Azure Blob Storage + Azure Data Factory</span>
+    </div>
+    <div class="progress-item">
+      <span class="status-planned">○</span>
+      <span><strong>Project 3</strong> — SQL Analytics + Databricks visualizations</span>
+    </div>
+    <div class="progress-item">
+      <span class="status-planned">○</span>
+      <span><strong>AZ-900 Exam</strong> — Azure Fundamentals Certification</span>
+    </div>
+    <div class="progress-item">
+      <span class="status-planned">○</span>
+      <span><strong>DP-900 Exam</strong> — Data Fundamentals Certification</span>
+    </div>
+    <div class="progress-item">
+      <span class="status-planned">○</span>
+      <span><strong>DP-100 Exam</strong> — Azure Data Scientist Certification</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    Shahzad Hassan · Azure Databricks Learning Journey · Project 1 Complete · May 2026
+  </div>
+
+</div>
+</body>
+</html>

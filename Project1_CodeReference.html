@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project 1 — Code Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --surface: #161b27;
+    --surface2: #1c2333;
+    --border: #21293b;
+    --accent: #4f8ef7;
+    --green: #3dd68c;
+    --gold: #f0b429;
+    --purple: #a78bfa;
+    --coral: #f87171;
+    --teal: #22d3ee;
+    --bronze: #cd7f32;
+    --silver: #94a3b8;
+    --text: #dde3f0;
+    --muted: #5a6a85;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 2rem 1rem;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    padding: 2rem 0 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+
+  .header p {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  /* Notebook tabs */
+  .nb-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 1.25rem;
+  }
+
+  .nb-1 { background: rgba(79,142,247,0.12); color: var(--accent); border: 1px solid rgba(79,142,247,0.25); }
+  .nb-2 { background: rgba(61,214,140,0.12); color: var(--green); border: 1px solid rgba(61,214,140,0.25); }
+
+  /* Section headers */
+  .section {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .section-header h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .section-header .what {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* Code cell */
+  .cell {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+
+  .cell-header {
+    background: var(--surface2);
+    padding: 6px 14px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cell-header .cell-tag {
+    font-size: 10px;
+    padding: 1px 8px;
+    border-radius: 3px;
+    font-family: var(--mono);
+  }
+
+  .tag-action  { background: rgba(61,214,140,0.12);  color: var(--green);  border: 1px solid rgba(61,214,140,0.2); }
+  .tag-transform { background: rgba(79,142,247,0.12); color: var(--accent); border: 1px solid rgba(79,142,247,0.2); }
+  .tag-save    { background: rgba(240,180,41,0.12);  color: var(--gold);   border: 1px solid rgba(240,180,41,0.2); }
+  .tag-delta   { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
+  .tag-read    { background: rgba(34,211,238,0.12);  color: var(--teal);   border: 1px solid rgba(34,211,238,0.2); }
+
+  pre {
+    padding: 1rem 1.25rem;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.85;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* Syntax colors */
+  .kw  { color: #ff79c6; }
+  .fn  { color: #50fa7b; }
+  .str { color: #f1fa8c; }
+  .cm  { color: #4a5568; font-style: italic; }
+  .var { color: #8be9fd; }
+  .num { color: #bd93f9; }
+  .op  { color: #ff79c6; }
+  .cls { color: #ffb86c; }
+
+  /* Explanation */
+  .explain {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 0.875rem 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .explain table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+  }
+
+  .explain td {
+    padding: 4px 8px;
+    font-size: 12px;
+    vertical-align: top;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .explain td:first-child {
+    font-family: var(--mono);
+    color: var(--teal);
+    white-space: nowrap;
+    padding-right: 16px;
+    width: 200px;
+  }
+
+  .explain td:last-child { color: var(--muted); }
+
+  /* Layer badges for Medallion */
+  .layer-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 10px;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+  }
+
+  .bronze-b { background: rgba(205,127,50,0.12); color: var(--bronze); border: 1px solid rgba(205,127,50,0.25); }
+  .silver-b { background: rgba(148,163,184,0.12); color: var(--silver); border: 1px solid rgba(148,163,184,0.25); }
+  .gold-b   { background: rgba(240,180,41,0.12); color: var(--gold); border: 1px solid rgba(240,180,41,0.25); }
+
+  /* Divider */
+  .nb-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 2.5rem 0;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .nb-divider::before,
+  .nb-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Quick ref table */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-bottom: 1rem;
+  }
+
+  .ref-table th {
+    background: var(--surface2);
+    color: var(--teal);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  .ref-table td {
+    padding: 7px 12px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    vertical-align: top;
+  }
+
+  .ref-table td:first-child {
+    font-family: var(--mono);
+    color: var(--green);
+    white-space: nowrap;
+  }
+
+  .ref-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  code {
+    font-family: var(--mono);
+    background: var(--surface2);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--teal);
+  }
+
+  .footer {
+    text-align: center;
+    padding: 2rem 0 1rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="tag">Azure Databricks · Project 1 · Code Reference</div>
+    <h1>All Formulas & Code — Both Notebooks</h1>
+    <p>Project_01_ETL &nbsp;·&nbsp; Medallion_Pipeline &nbsp;·&nbsp; Full reference from start to finish</p>
+  </div>
+
+  <!-- ==================== NOTEBOOK 1 ==================== -->
+  <div class="nb-label nb-1">◉ &nbsp;Notebook 1 — Project_01_ETL</div>
+
+  <!-- Step 1 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">1</div>
+      <h2>Create a DataFrame from scratch</h2>
+      <span class="what">like INSERT + SELECT * in Teradata</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_01 · create dataframe</span>
+        <span class="cell-tag tag-action">Action</span>
+      </div>
+      <pre><span class="cm"># Raw data as a Python list — like VALUES in Teradata INSERT</span>
+<span class="var">data</span> = [(<span class="str">"Alice"</span>, <span class="str">"UAE"</span>, <span class="num">5000</span>),
+        (<span class="str">"Bob"</span>,   <span class="str">"KSA"</span>, <span class="num">7000</span>),
+        (<span class="str">"Carol"</span>, <span class="str">"UAE"</span>, <span class="num">4500</span>)]
+
+<span class="cm"># Column names — like column definitions in CREATE TABLE</span>
+<span class="var">columns</span> = [<span class="str">"name"</span>, <span class="str">"country"</span>, <span class="str">"salary"</span>]
+
+<span class="cm"># Create DataFrame — like a table in memory</span>
+<span class="var">df</span> = <span class="var">spark</span>.<span class="fn">createDataFrame</span>(<span class="var">data</span>, <span class="var">columns</span>)
+
+<span class="cm"># Show results — like SELECT * FROM table</span>
+<span class="var">df</span>.<span class="fn">show</span>()</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>spark.createDataFrame(data, cols)</td><td>Creates in-memory table from a Python list. spark is always available in Databricks — no setup needed.</td></tr>
+        <tr><td>df.show()</td><td>ACTION — triggers actual computation and prints results. Nothing runs until an action is called.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">2</div>
+      <h2>Filter rows</h2>
+      <span class="what">like WHERE in Teradata</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_02 · filter</span>
+        <span class="cell-tag tag-transform">Transformation</span>
+      </div>
+      <pre><span class="cm"># Filter — like WHERE country = 'UAE' in Teradata</span>
+<span class="var">uae_df</span> = <span class="var">df</span>.<span class="fn">filter</span>(<span class="var">df</span>.country == <span class="str">"UAE"</span>)
+<span class="var">uae_df</span>.<span class="fn">show</span>()</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>.filter(condition)</td><td>Keeps only rows matching the condition. Lazy — nothing runs until .show() or another action is called.</td></tr>
+        <tr><td>df.country == "UAE"</td><td>Column condition. Can also write col("country") == "UAE" — both work the same way.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">3</div>
+      <h2>Group and count</h2>
+      <span class="what">like GROUP BY in Teradata</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_03 · groupBy</span>
+        <span class="cell-tag tag-transform">Transformation</span>
+      </div>
+      <pre><span class="cm"># Group by country and count — like GROUP BY country in Teradata</span>
+<span class="var">df</span>.<span class="fn">groupBy</span>(<span class="str">"country"</span>).<span class="fn">count</span>().<span class="fn">show</span>()</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>.groupBy("column")</td><td>Groups rows by column value — identical to GROUP BY in Teradata SQL.</td></tr>
+        <tr><td>.count()</td><td>Counts rows per group. Can also use .sum(), .avg(), .max(), .min().</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">4</div>
+      <h2>Add a calculated column</h2>
+      <span class="what">like CASE WHEN in Teradata</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_04 · withColumn + when</span>
+        <span class="cell-tag tag-transform">Transformation</span>
+      </div>
+      <pre><span class="kw">from</span> pyspark.sql.functions <span class="kw">import</span> <span class="cls">when</span>, <span class="cls">col</span>
+
+<span class="cm"># Add grade column — like CASE WHEN salary >= 6000 THEN 'Senior' ELSE 'Junior'</span>
+<span class="var">df_with_grade</span> = <span class="var">df</span>.<span class="fn">withColumn</span>(<span class="str">"grade"</span>,
+    <span class="fn">when</span>(<span class="fn">col</span>(<span class="str">"salary"</span>) >= <span class="num">6000</span>, <span class="str">"Senior"</span>)
+    .<span class="fn">otherwise</span>(<span class="str">"Junior"</span>))
+
+<span class="var">df_with_grade</span>.<span class="fn">show</span>()</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>.withColumn("name", expr)</td><td>Adds a new column without touching existing ones. Non-destructive — original df unchanged.</td></tr>
+        <tr><td>when(condition, value)</td><td>Equivalent of CASE WHEN in Teradata. Chain multiple .when() calls for multiple conditions.</td></tr>
+        <tr><td>.otherwise(value)</td><td>The ELSE clause. What to put if no when() condition matched.</td></tr>
+        <tr><td>col("salary")</td><td>References a DataFrame column explicitly. Needed so Python doesn't confuse it with a variable.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">5</div>
+      <h2>Sort results</h2>
+      <span class="what">like ORDER BY DESC in Teradata</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_05 · orderBy</span>
+        <span class="cell-tag tag-transform">Transformation</span>
+      </div>
+      <pre><span class="cm"># Sort by salary descending — like ORDER BY salary DESC in Teradata</span>
+<span class="var">df_with_grade</span>.<span class="fn">orderBy</span>(<span class="fn">col</span>(<span class="str">"salary"</span>).<span class="fn">desc</span>()).<span class="fn">show</span>()</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>.orderBy(col("x").desc())</td><td>Sorts descending. Use .asc() for ascending. Default is ascending.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Step 6 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">6</div>
+      <h2>Save as Delta table</h2>
+      <span class="what">like CREATE TABLE in Teradata</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_06 · save delta table</span>
+        <span class="cell-tag tag-save">Save</span>
+      </div>
+      <pre><span class="cm"># Save DataFrame as Delta table — tracked, versioned, time-travelable</span>
+<span class="var">df_with_grade</span>.<span class="fn">write</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">saveAsTable</span>(<span class="str">"employee_grades"</span>)
+
+<span class="fn">print</span>(<span class="str">"Delta table created!"</span>)</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>.write.format("delta")</td><td>Specifies Delta format — gives ACID, time travel, and versioning automatically.</td></tr>
+        <tr><td>.saveAsTable("name")</td><td>Registers as a named table in Databricks catalog — queryable by name from any notebook.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Step 7 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">7</div>
+      <h2>Read Delta table back</h2>
+      <span class="what">like SELECT * FROM table in Teradata</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_07 · read delta table</span>
+        <span class="cell-tag tag-read">Read</span>
+      </div>
+      <pre><span class="cm"># Read saved Delta table back — like SELECT * FROM employee_grades</span>
+<span class="var">df_loaded</span> = <span class="var">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">table</span>(<span class="str">"employee_grades"</span>)
+<span class="var">df_loaded</span>.<span class="fn">show</span>()</pre>
+    </div>
+  </div>
+
+  <!-- Step 8 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">8</div>
+      <h2>Append new rows</h2>
+      <span class="what">like INSERT INTO in Teradata</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_08 · append rows</span>
+        <span class="cell-tag tag-save">Save</span>
+      </div>
+      <pre><span class="kw">from</span> pyspark.sql <span class="kw">import</span> <span class="cls">Row</span>
+
+<span class="cm"># Create one new row — like a single INSERT in Teradata</span>
+<span class="var">new_employee</span> = <span class="var">spark</span>.<span class="fn">createDataFrame</span>([
+    <span class="cls">Row</span>(name=<span class="str">"David"</span>, country=<span class="str">"UAE"</span>, salary=<span class="num">9000</span>, grade=<span class="str">"Senior"</span>)
+])
+
+<span class="cm"># Append — adds rows without deleting existing data</span>
+<span class="var">new_employee</span>.<span class="fn">write</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">mode</span>(<span class="str">"append"</span>).<span class="fn">saveAsTable</span>(<span class="str">"employee_grades"</span>)
+
+<span class="var">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">table</span>(<span class="str">"employee_grades"</span>).<span class="fn">show</span>()</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>.mode("append")</td><td>Adds new rows — keeps all existing rows. Like INSERT INTO in Teradata.</td></tr>
+        <tr><td>.mode("overwrite")</td><td>Replaces everything. Like TRUNCATE TABLE then INSERT. Use carefully!</td></tr>
+        <tr><td>Row(col=value)</td><td>Creates a single record with named columns — like one row of VALUES in Teradata INSERT.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Step 9 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">9</div>
+      <h2>Delta Time Travel</h2>
+      <span class="what">not possible in Teradata — Delta superpower</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_09 · time travel</span>
+        <span class="cell-tag tag-delta">Delta</span>
+      </div>
+      <pre><span class="cm"># Travel back to version 0 — before David was added</span>
+<span class="var">df_v0</span> = <span class="var">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>) \
+    .<span class="fn">option</span>(<span class="str">"versionAsOf"</span>, <span class="num">0</span>) \
+    .<span class="fn">table</span>(<span class="str">"employee_grades"</span>)
+<span class="var">df_v0</span>.<span class="fn">show</span>()
+
+<span class="cm"># Travel to version 1</span>
+<span class="var">df_v1</span> = <span class="var">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>) \
+    .<span class="fn">option</span>(<span class="str">"versionAsOf"</span>, <span class="num">1</span>) \
+    .<span class="fn">table</span>(<span class="str">"employee_grades"</span>)
+<span class="var">df_v1</span>.<span class="fn">show</span>()</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>.option("versionAsOf", N)</td><td>Returns the table exactly as it was at version N. Every write creates a new version automatically.</td></tr>
+        <tr><td>.option("timestampAsOf", "date")</td><td>Alternative — travel by timestamp instead of version number.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Step 10 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">10</div>
+      <h2>View Delta history</h2>
+      <span class="what">automatic audit log — not available in Teradata</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_10 · transaction history</span>
+        <span class="cell-tag tag-delta">Delta</span>
+      </div>
+      <pre><span class="kw">from</span> delta.tables <span class="kw">import</span> <span class="cls">DeltaTable</span>
+
+<span class="cm"># Get Delta management object for the table</span>
+<span class="var">delta_table</span> = <span class="cls">DeltaTable</span>.<span class="fn">forName</span>(<span class="var">spark</span>, <span class="str">"employee_grades"</span>)
+
+<span class="cm"># Show clean readable history — select only useful columns</span>
+<span class="var">delta_table</span>.<span class="fn">history</span>().<span class="fn">select</span>(
+    <span class="str">"version"</span>, <span class="str">"timestamp"</span>, <span class="str">"operation"</span>, <span class="str">"operationParameters"</span>
+).<span class="fn">show</span>(truncate=<span class="kw">False</span>)</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>DeltaTable.forName(spark, "name")</td><td>Gets a management handle for the table — lets you view history, run OPTIMIZE, VACUUM etc.</td></tr>
+        <tr><td>.history()</td><td>Returns full audit log — version, timestamp, who made the change, what operation.</td></tr>
+        <tr><td>.select("col1","col2")</td><td>Like SELECT specific columns in Teradata — picks only the columns you want to see.</td></tr>
+        <tr><td>show(truncate=False)</td><td>Prevents Databricks from cutting off long text in columns. Like widening columns in DBeaver.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Step 11 -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">11</div>
+      <h2>Remove duplicates</h2>
+      <span class="what">like SELECT DISTINCT in Teradata</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_11 · deduplicate</span>
+        <span class="cell-tag tag-transform">Transformation</span>
+      </div>
+      <pre><span class="cm"># Remove exact duplicates — like SELECT DISTINCT * in Teradata</span>
+<span class="var">df_clean</span> = <span class="var">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">table</span>(<span class="str">"employee_grades"</span>).<span class="fn">dropDuplicates</span>()
+
+<span class="cm"># Save clean version back — overwrite the messy table</span>
+<span class="var">df_clean</span>.<span class="fn">write</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">mode</span>(<span class="str">"overwrite"</span>).<span class="fn">saveAsTable</span>(<span class="str">"employee_grades"</span>)
+
+<span class="var">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">table</span>(<span class="str">"employee_grades"</span>).<span class="fn">show</span>()</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>.dropDuplicates()</td><td>Removes rows where ALL columns match — like SELECT DISTINCT * in Teradata.</td></tr>
+        <tr><td>.dropDuplicates(["id"])</td><td>Removes rows sharing the same id value even if other columns differ. More targeted.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="nb-divider">Notebook 2 — Medallion_Pipeline</div>
+  <div class="nb-label nb-2">◉ &nbsp;Notebook 2 — Medallion_Pipeline</div>
+
+  <!-- Bronze -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">1</div>
+      <h2>Create raw data and save Bronze layer</h2>
+      <span class="what">staging table — everything as received</span>
+    </div>
+    <div class="layer-badge bronze-b">Bronze — raw layer</div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_01 · bronze layer</span>
+        <span class="cell-tag tag-save">Save</span>
+      </div>
+      <pre><span class="cm"># Raw data — intentionally messy like real production data</span>
+<span class="cm"># Bob is duplicated, Eve has null country, Frank has null salary</span>
+<span class="var">raw_data</span> = [
+    (<span class="num">1</span>, <span class="str">"Alice"</span>, <span class="str">"UAE"</span>, <span class="num">5000</span>, <span class="str">"2024-01-15"</span>),
+    (<span class="num">2</span>, <span class="str">"Bob"</span>,   <span class="str">"KSA"</span>, <span class="num">7000</span>, <span class="str">"2024-01-15"</span>),
+    (<span class="num">3</span>, <span class="str">"Carol"</span>, <span class="str">"UAE"</span>, <span class="num">4500</span>, <span class="str">"2024-01-16"</span>),
+    (<span class="num">4</span>, <span class="str">"David"</span>, <span class="str">"UAE"</span>, <span class="num">9000</span>, <span class="str">"2024-01-16"</span>),
+    (<span class="num">2</span>, <span class="str">"Bob"</span>,   <span class="str">"KSA"</span>, <span class="num">7000</span>, <span class="str">"2024-01-15"</span>),   <span class="cm"># duplicate</span>
+    (<span class="num">5</span>, <span class="str">"Eve"</span>,   <span class="kw">None</span>,  <span class="num">6000</span>, <span class="str">"2024-01-17"</span>),   <span class="cm"># null country</span>
+    (<span class="num">6</span>, <span class="str">"Frank"</span>, <span class="str">"UAE"</span>, <span class="kw">None</span>, <span class="str">"2024-01-17"</span>)    <span class="cm"># null salary</span>
+]
+
+<span class="var">columns</span> = [<span class="str">"id"</span>, <span class="str">"name"</span>, <span class="str">"country"</span>, <span class="str">"salary"</span>, <span class="str">"hire_date"</span>]
+<span class="var">df_raw</span> = <span class="var">spark</span>.<span class="fn">createDataFrame</span>(<span class="var">raw_data</span>, <span class="var">columns</span>)
+<span class="var">df_raw</span>.<span class="fn">show</span>()
+<span class="fn">print</span>(<span class="fn">f</span><span class="str">"Total raw rows received: {<span class="var">df_raw</span>.<span class="fn">count</span>()}"</span>)
+
+<span class="cm"># Save as Bronze — no changes, everything as received</span>
+<span class="var">df_raw</span>.<span class="fn">write</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">mode</span>(<span class="str">"overwrite"</span>).<span class="fn">saveAsTable</span>(<span class="str">"bronze_employees"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="str">"Bronze saved with {<span class="var">df_raw</span>.<span class="fn">count</span>()} rows"</span>)</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>None in Python</td><td>Becomes NULL in Spark DataFrame — same concept as NULL in Teradata.</td></tr>
+        <tr><td>f"text {variable}"</td><td>f-string — Python way to embed variables inside text. Like PRINT 'Rows: ' || COUNT(*) in Teradata stored procedures.</td></tr>
+        <tr><td>Bronze — no cleaning</td><td>Never clean Bronze. It is the source of truth. Silver and Gold can always be rebuilt from it.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Silver -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">2</div>
+      <h2>Build and save Silver layer</h2>
+      <span class="what">clean, deduplicate, fix data types</span>
+    </div>
+    <div class="layer-badge silver-b">Silver — clean layer</div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_02 · silver layer</span>
+        <span class="cell-tag tag-transform">Transformation</span>
+      </div>
+      <pre><span class="kw">from</span> pyspark.sql.functions <span class="kw">import</span> <span class="cls">col</span>, <span class="cls">to_date</span>
+
+<span class="cm"># Always read Silver FROM Bronze — never from raw list</span>
+<span class="var">df_silver</span> = <span class="var">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">table</span>(<span class="str">"bronze_employees"</span>)
+
+<span class="cm"># Step 1 — Remove duplicates by id — like SELECT DISTINCT id in Teradata</span>
+<span class="var">df_silver</span> = <span class="var">df_silver</span>.<span class="fn">dropDuplicates</span>([<span class="str">"id"</span>])
+
+<span class="cm"># Step 2 — Remove rows with null country or salary</span>
+<span class="cm"># like WHERE country IS NOT NULL AND salary IS NOT NULL in Teradata</span>
+<span class="var">df_silver</span> = <span class="var">df_silver</span>.<span class="fn">filter</span>(
+    <span class="fn">col</span>(<span class="str">"country"</span>).<span class="fn">isNotNull</span>() &amp;
+    <span class="fn">col</span>(<span class="str">"salary"</span>).<span class="fn">isNotNull</span>()
+)
+
+<span class="cm"># Step 3 — Convert hire_date string to proper date type</span>
+<span class="cm"># like CAST(hire_date AS DATE FORMAT 'YYYY-MM-DD') in Teradata</span>
+<span class="var">df_silver</span> = <span class="var">df_silver</span>.<span class="fn">withColumn</span>(
+    <span class="str">"hire_date"</span>,
+    <span class="fn">to_date</span>(<span class="fn">col</span>(<span class="str">"hire_date"</span>), <span class="str">"yyyy-MM-dd"</span>)
+)
+
+<span class="var">df_silver</span>.<span class="fn">show</span>()
+<span class="fn">print</span>(<span class="fn">f</span><span class="str">"Silver has {<span class="var">df_silver</span>.<span class="fn">count</span>()} clean rows"</span>)
+
+<span class="cm"># Save Silver — separate step from transformation intentionally</span>
+<span class="var">df_silver</span>.<span class="fn">write</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">mode</span>(<span class="str">"overwrite"</span>).<span class="fn">saveAsTable</span>(<span class="str">"silver_employees"</span>)</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>col("x").isNotNull()</td><td>Checks column is not null. Use in .filter() to remove null rows. Like IS NOT NULL in Teradata.</td></tr>
+        <tr><td>&amp; between conditions</td><td>AND operator for column conditions in PySpark. Use | for OR.</td></tr>
+        <tr><td>to_date(col("x"), "format")</td><td>Converts string to proper date type. Format must match the string — "yyyy-MM-dd" for "2024-01-15".</td></tr>
+        <tr><td>Save separately from transform</td><td>If save fails you know transform worked. If transform fails you never save bad data. Always separate these steps.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Gold -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">3</div>
+      <h2>Build and save Gold layer</h2>
+      <span class="what">business aggregations for dashboards</span>
+    </div>
+    <div class="layer-badge gold-b">Gold — business layer</div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_03 · gold layer</span>
+        <span class="cell-tag tag-transform">Transformation</span>
+      </div>
+      <pre><span class="kw">from</span> pyspark.sql.functions <span class="kw">import</span> <span class="cls">count</span>, <span class="cls">avg</span>, <span class="cls">max</span>, <span class="cls">round</span>
+
+<span class="cm"># Always read Gold FROM Silver — never from Bronze directly</span>
+<span class="var">df_gold</span> = <span class="var">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">table</span>(<span class="str">"silver_employees"</span>)
+
+<span class="cm"># Aggregate by country — like GROUP BY with multiple aggregates in Teradata</span>
+<span class="var">df_gold_summary</span> = <span class="var">df_gold</span>.<span class="fn">groupBy</span>(<span class="str">"country"</span>).<span class="fn">agg</span>(
+    <span class="fn">count</span>(<span class="str">"id"</span>).<span class="fn">alias</span>(<span class="str">"total_employees"</span>),          <span class="cm"># COUNT(*)</span>
+    <span class="fn">round</span>(<span class="fn">avg</span>(<span class="str">"salary"</span>), <span class="num">2</span>).<span class="fn">alias</span>(<span class="str">"avg_salary"</span>),   <span class="cm"># ROUND(AVG(salary),2)</span>
+    <span class="fn">max</span>(<span class="str">"salary"</span>).<span class="fn">alias</span>(<span class="str">"max_salary"</span>)              <span class="cm"># MAX(salary)</span>
+)
+
+<span class="cm"># Sort by most employees first — like ORDER BY total_employees DESC</span>
+<span class="var">df_gold_summary</span>.<span class="fn">orderBy</span>(<span class="str">"total_employees"</span>, ascending=<span class="kw">False</span>).<span class="fn">show</span>()
+
+<span class="cm"># Save Gold</span>
+<span class="var">df_gold_summary</span>.<span class="fn">write</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">mode</span>(<span class="str">"overwrite"</span>).<span class="fn">saveAsTable</span>(<span class="str">"gold_employee_summary"</span>)</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>.agg(func1, func2, ...)</td><td>Multiple aggregations in one go. Like SELECT COUNT(*), AVG(), MAX() GROUP BY in Teradata.</td></tr>
+        <tr><td>count("id").alias("name")</td><td>Count rows and rename result column. .alias() = AS in Teradata SQL.</td></tr>
+        <tr><td>round(avg("salary"), 2)</td><td>Average salary rounded to 2 decimal places. Like ROUND(AVG(salary),2) in Teradata.</td></tr>
+        <tr><td>orderBy("col", ascending=False)</td><td>Sort descending. ascending=True (or omit) for ascending order.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Validation -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num">4</div>
+      <h2>Pipeline validation report</h2>
+      <span class="what">confirm all three layers exist and are correct</span>
+    </div>
+
+    <div class="cell">
+      <div class="cell-header">
+        <span>cell_04 · validation</span>
+        <span class="cell-tag tag-action">Action</span>
+      </div>
+      <pre><span class="fn">print</span>(<span class="str">"="</span> * <span class="num">50</span>)
+<span class="fn">print</span>(<span class="str">"MEDALLION PIPELINE VALIDATION REPORT"</span>)
+<span class="fn">print</span>(<span class="str">"="</span> * <span class="num">50</span>)
+
+<span class="cm"># Read all three layers fresh from Delta storage</span>
+<span class="var">bronze</span> = <span class="var">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">table</span>(<span class="str">"bronze_employees"</span>)
+<span class="var">silver</span> = <span class="var">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">table</span>(<span class="str">"silver_employees"</span>)
+<span class="var">gold</span>   = <span class="var">spark</span>.<span class="fn">read</span>.<span class="fn">format</span>(<span class="str">"delta"</span>).<span class="fn">table</span>(<span class="str">"gold_employee_summary"</span>)
+
+<span class="fn">print</span>(<span class="fn">f</span><span class="str">"\nBronze — raw rows    : {<span class="var">bronze</span>.<span class="fn">count</span>()}"</span>)  <span class="cm"># expect 7</span>
+<span class="fn">print</span>(<span class="fn">f</span><span class="str">"Silver — clean rows  : {<span class="var">silver</span>.<span class="fn">count</span>()}"</span>)  <span class="cm"># expect 4</span>
+<span class="fn">print</span>(<span class="fn">f</span><span class="str">"Gold   — summaries   : {<span class="var">gold</span>.<span class="fn">count</span>()}"</span>)    <span class="cm"># expect 2</span>
+
+<span class="fn">print</span>(<span class="str">"\n--- BRONZE ---"</span>); <span class="var">bronze</span>.<span class="fn">show</span>()
+<span class="fn">print</span>(<span class="str">"--- SILVER ---"</span>); <span class="var">silver</span>.<span class="fn">show</span>()
+<span class="fn">print</span>(<span class="str">"--- GOLD ---"</span>);   <span class="var">gold</span>.<span class="fn">show</span>()
+
+<span class="fn">print</span>(<span class="str">"="</span> * <span class="num">50</span>)
+<span class="fn">print</span>(<span class="str">"Pipeline completed successfully!"</span>)
+<span class="fn">print</span>(<span class="str">"="</span> * <span class="num">50</span>)</pre>
+    </div>
+
+    <div class="explain">
+      <table>
+        <tr><td>"=" * 50</td><td>Python repeats the character 50 times — creates a visual separator line in output logs.</td></tr>
+        <tr><td>Read from table not variable</td><td>Proves data actually saved to Delta storage, not just exists in memory. Like checking the shelf not the receipt.</td></tr>
+        <tr><td>Expected row counts</td><td>Bronze=7 (all raw), Silver=4 (cleaned), Gold=2 (UAE+KSA). Wrong count = pipeline has a bug.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Quick Reference -->
+  <div class="section">
+    <div class="section-header">
+      <div class="step-num" style="background:var(--surface2)">★</div>
+      <h2>Quick Formula Reference</h2>
+      <span class="what">everything at a glance</span>
+    </div>
+
+    <table class="ref-table">
+      <tr><th>Formula</th><th>What it does</th><th>Teradata equivalent</th></tr>
+      <tr><td>spark.createDataFrame(data, cols)</td><td>Create table in memory from Python list</td><td>INSERT + CREATE TABLE</td></tr>
+      <tr><td>df.show()</td><td>Print results — triggers execution</td><td>SELECT * (runs query)</td></tr>
+      <tr><td>df.count()</td><td>Count total rows</td><td>SELECT COUNT(*)</td></tr>
+      <tr><td>df.filter(condition)</td><td>Keep matching rows</td><td>WHERE clause</td></tr>
+      <tr><td>df.groupBy("col").count()</td><td>Count per group</td><td>GROUP BY col</td></tr>
+      <tr><td>df.groupBy("col").agg(...)</td><td>Multiple aggregations per group</td><td>GROUP BY + COUNT/AVG/MAX</td></tr>
+      <tr><td>df.withColumn("name", expr)</td><td>Add new calculated column</td><td>CASE WHEN / derived column</td></tr>
+      <tr><td>df.orderBy(col("x").desc())</td><td>Sort descending</td><td>ORDER BY x DESC</td></tr>
+      <tr><td>df.dropDuplicates()</td><td>Remove identical rows</td><td>SELECT DISTINCT *</td></tr>
+      <tr><td>df.dropDuplicates(["id"])</td><td>Remove rows with duplicate id</td><td>SELECT DISTINCT id logic</td></tr>
+      <tr><td>df.select("a","b","c")</td><td>Pick specific columns</td><td>SELECT a, b, c</td></tr>
+      <tr><td>col("x").isNotNull()</td><td>Check column not null</td><td>x IS NOT NULL</td></tr>
+      <tr><td>col("x").isNull()</td><td>Check column is null</td><td>x IS NULL</td></tr>
+      <tr><td>when(cond, val).otherwise(val)</td><td>Conditional value</td><td>CASE WHEN ... ELSE ... END</td></tr>
+      <tr><td>to_date(col("x"), "format")</td><td>Convert string to date</td><td>CAST(x AS DATE FORMAT ...)</td></tr>
+      <tr><td>count("col").alias("name")</td><td>Count and rename result</td><td>COUNT(*) AS name</td></tr>
+      <tr><td>avg("col")</td><td>Average</td><td>AVG(col)</td></tr>
+      <tr><td>round(avg("col"), 2)</td><td>Average rounded to 2 decimals</td><td>ROUND(AVG(col), 2)</td></tr>
+      <tr><td>max("col") / min("col")</td><td>Maximum / minimum value</td><td>MAX(col) / MIN(col)</td></tr>
+      <tr><td>.write.format("delta").mode("append").saveAsTable("name")</td><td>Add rows to existing Delta table</td><td>INSERT INTO table</td></tr>
+      <tr><td>.write.format("delta").mode("overwrite").saveAsTable("name")</td><td>Replace all data in Delta table</td><td>TRUNCATE + INSERT</td></tr>
+      <tr><td>spark.read.format("delta").table("name")</td><td>Read saved Delta table</td><td>SELECT * FROM table</td></tr>
+      <tr><td>.option("versionAsOf", N)</td><td>Read historical version of table</td><td>No equivalent in Teradata</td></tr>
+      <tr><td>DeltaTable.forName(spark, "name").history()</td><td>View full audit log of all changes</td><td>No equivalent — manual audit tables only</td></tr>
+      <tr><td>spark.sql("SHOW TABLES").show()</td><td>List all tables in workspace</td><td>SHOW TABLES / DBC.Tables</td></tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    Shahzad Hassan · Project 1 Code Reference · Azure Databricks Learning Journey · May 2026
+  </div>
+
+</div>
+</body>
+</html>
