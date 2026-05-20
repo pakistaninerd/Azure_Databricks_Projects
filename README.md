@@ -139,17 +139,6 @@ Raw Data — 7 rows (duplicates + nulls included)
 
 ---
 
-## Full Roadmap
-
-- [x] Project 1 — PySpark fundamentals + Delta Lake + Medallion Architecture
-- [ ] Project 2 — Real CSV datasets from Azure Blob Storage + Azure Data Factory pipelines
-- [ ] Project 3 — SQL Analytics + Databricks dashboards and visualizations
-- [ ] AZ-900 — Azure Fundamentals exam
-- [ ] DP-900 — Azure Data Fundamentals exam
-- [ ] DP-100 — Azure Data Scientist Associate exam
-
----
-
 ## How I Learn
 
 Every project follows the same structure so concepts stick:
