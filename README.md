@@ -2,7 +2,7 @@
 Journey From AZ 900 to DP 100 - Azure Databricks personnel projets repository
 
 
-## 📁 Project 1 — PySpark ETL + Delta Lake + Medallion Architecture
+## Project 1 — PySpark ETL + Delta Lake + Medallion Architecture
 
 **Status:** Complete  
 **Duration:** 2 sessions  
@@ -15,9 +15,9 @@ Journey From AZ 900 to DP 100 - Azure Databricks personnel projets repository
 | File | What is inside |
 |---|---|
 | `Project_01_ETL_&_Delta_Tables.ipynb` | First ever PySpark notebook — creating DataFrames, filtering, grouping, adding columns, sorting, saving Delta tables, appending rows, time travel, viewing history, fixing duplicates |
-| `Project_1_Medallion_Pipelines.ipynb` | Complete Bronze to Silver to Gold pipeline — raw data ingestion, data cleaning, type conversion, business aggregations, pipeline validation report |
-| `Project1_Summary.html` | Visual summary of everything learned — concepts, AZ-900 exam scenarios, roadmap |
-| `Project1_CodeReference.html` | Every formula from both notebooks side by side with Teradata SQL equivalents |
+| `Project_01_Medallion_Pipelines.ipynb` | Complete Bronze to Silver to Gold pipeline — raw data ingestion, data cleaning, type conversion, business aggregations, pipeline validation report |
+| `Project_01_Summary.html` | Visual summary of everything learned — concepts, AZ-900 exam scenarios, roadmap |
+| `Project_01_CodeReference.html` | Every formula from both notebooks side by side with Teradata SQL equivalents |
 
 ---
 
@@ -51,7 +51,7 @@ Journey From AZ 900 to DP 100 - Azure Databricks personnel projets repository
 
 ---
 
-### 💡 Lessons Learned
+### Lessons Learned
 
 **Notebook 1 — Project_01_ETL_&_Delta_Tables**
 
@@ -62,7 +62,7 @@ Journey From AZ 900 to DP 100 - Azure Databricks personnel projets repository
 - Accidentally appended David twice by running the same cell twice — learned that `append` mode blindly adds rows without checking for existing duplicates, and fixed it using `dropDuplicates()` with `overwrite` mode.
 - Saw my own email and cluster ID in the Delta history — realized Delta automatically records who made every change, providing a built-in audit trail for compliance.
 
-**Notebook 2 — Project_1_Medallion_Pipelines**
+**Notebook 2 — Project_01_Medallion_Pipelines**
 
 - Built a Bronze layer that intentionally stored messy raw data — duplicate Bob, null country for Eve, null salary for Frank. Understood that Bronze is the source of truth and should never be modified. If Silver or Gold break, Bronze is always there to rebuild from.
 - Built a Silver layer that cleaned the Bronze data — `dropDuplicates(["id"])` removed Bob's duplicate, `isNotNull()` filter removed Eve and Frank, `to_date()` converted string dates to proper date type. Seven rows became four clean rows.
